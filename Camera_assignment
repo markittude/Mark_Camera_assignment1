@@ -1,0 +1,56 @@
+import requests
+import ast
+
+class camera:
+
+    def __init__(self):
+        self.response = eval(requests.get('https://run.mocky.io/v3/57ae8489-caa8-40ac-967f-f19609ec4349').text)
+        self.response2 = eval(requests.get('https://run.mocky.io/v3/a7ddb4d3-ad1d-4343-b020-8c077c2a6a61').text)
+        self.dict1 = {"device": [], "upgrade": []}
+        for i in self.response:
+            self.lst = {}
+            for j, k in i.items():
+                self.lst.update({j: k})
+            self.dict1['device'].append(self.lst)
+        for m in self.response2:
+            self.lst = {}
+            for j, k in m.items():
+                self.lst.update({j: k})
+            self.dict1['upgrade'].append(self.lst)
+
+    def setPort(self, x: int) -> None:
+        """setPort(x) -- Add a new key "port" for "id" x element in the dict, and set the usb port number
+            only from the sibling "port_path"."""
+
+    def getMinIdElement(self):
+        """Retrieve the "port" with "name" from "id" x element in the dict."""
+        pass
+
+    def getUpgradableDevice(self):
+        """-- Retrieve all the "name" in the dict which "SupportUpgrade" is "Ture"."""
+        for i in self.dict1['upgrade']:
+            if i['SupportUpgrade']:
+                print("The product that supports upgrade is " + str(i['name']))
+            else:
+                pass
+
+
+    def removeInvalidDevice(self):
+        """-- Remove all the elements which "cameras": "candidate",
+        "microphones" : "candidate", and "speakers" : "candidate" are all "False"."""
+
+        self.lst = []
+        for i in range(len(self.dict1['device'])):
+            for j, k in self.dict1['device'][i].items():
+                if (j == "cameras" or j == "speakers" or j == "microphones"):
+                    if str(k[0]['candidate']) == "False":
+                        self.lst.append([i,j])
+
+        for x in self.lst: del self.dict1['device'][x[0]][x[1]]
+        print("Dictionary after invalid device removie is " + str(self.dict1))
+
+
+if __name__ == '__main__':
+    main = camera()
+    # main.getUpgradableDevice()
+    main.removeInvalidDevice()
